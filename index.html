@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zamok-box</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #5f7b9bf2; /* A deep bluish-gray background */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Stacks elements vertically */
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+            height: 100vh; /* Full viewport height */
+        }
+        h1 {
+            color: #000; /* Black color for heading */
+            margin-bottom: 20px; /* Space between the heading and the form container */
+        }
+        .form-container {
+            border: 2px solid black; /* Black border around the form container */
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: auto; /* Adjust width as needed */
+            text-align: center; /* Centers the form elements */
+        }
+        form {
+            margin: 0; /* Adjusts margin to fit neatly inside the container */
+            padding: 0; /* No additional padding inside the form */
+        }
+        input[type="file"] {
+            width: 100%; /* Full width of the form */
+            margin: 10px 0;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #004494;
+        }
+    </style>
+</head>
+<body>
+     
+    <h1>Промышленная Фурнитура и Тара</h1>
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".pdf" required>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+</body>
+</html>

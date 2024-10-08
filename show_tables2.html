@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extracted Tables</title>
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/png">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .button {
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button1 {
+            background-color: #e77518;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        table {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Extracted Tables</h1>
+    {% for table, csv_path, filename in tables %}
+        <h2>Extraction from: {{ filename }}</h2>
+        <div>{{ table|safe }}</div>
+    {% endfor %}
+    
+    <form action="/generate-pdf-format1" method="post">
+        {% for table, csv_path in tables %}
+            <input type="hidden" name="csv_paths" value="{{ csv_path }}">
+        {% endfor %}
+        <button type="submit" class="button">Generate PDF Format 1</button>
+    </form>
+
+    <form action="/generate-pdf-format2" method="post">
+        {% for table, csv_path in tables %}
+            <input type="hidden" name="csv_paths" value="{{ csv_path }}">
+        {% endfor %}
+        <button type="submit" class="button">Generate PDF Format 2</button>
+    </form>
+
+    <!-- New Form for Generating Labels -->
+    <form action="/generate-labels" method="post">
+        {% for table, csv_path in tables %}
+            <input type="hidden" name="csv_paths" value="{{ csv_path }}">
+        {% endfor %}
+        <button type="submit" class="button1">Generate Labels</button>
+    </form>
+
+    <form action="/search" method="post">
+        <label for="product_id">Идентификатор:</label>
+        <input type="text" id="product_id" name="product_id" required>
+        <button type="submit">Search</button>
+    </form>
+    {% if product_info %}
+    <h2>Product Information:</h2>
+    <ul>
+        {% for key, value in product_info.items() %}
+        <li>{{ key }}: {{ value }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    <script>
+    $(document).ready(function() {
+        $('table').DataTable();
+        $("#printLabelButton").click(function(){
+            $.ajax({
+                url: '/print-label',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({key1: "value1", key2: "value2"}),
+                success: function(response) {
+                    alert("Success: " + response.message);
+                },
+                error: function(response) {
+                    alert("Error: " + response.message);
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>

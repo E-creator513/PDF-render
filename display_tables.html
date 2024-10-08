@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extracted Tables</title>
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .button {
+            background-color: #06121e;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button1 {
+            background-color: #e77518;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button2 {
+            background-color: #b39780;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button3 {
+            background-color: #6ab3e4;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        table {
+            margin-bottom: 20px;
+        }
+
+        .buyer-info {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('table').DataTable();
+        });
+    </script>
+</head>
+<body>
+    <h1>Extracted Tables</h1>
+    {% for item in tables %}
+        <h2>Extraction from: {{ item.filename }}</h2>
+        
+        <div class="buyer-info">
+            <h3>Покупатель Information:</h3>
+            <p>{{ item.buyer_sentence|safe }}</p>
+        </div>
+        
+        <div>{{ item.table|safe }}</div>
+        
+        <form action="/generate-pdf" method="post">
+            <input type="hidden" name="csv_path" value="{{ item.csv_path }}">
+            <input type="hidden" name="contains_target_phrase" value="{{ item.contains_target_phrase }}">
+            <button type="submit" class="button">Этикетки</button>
+        </form>
+
+        <a href="{{ url_for('download_pdf', csv_filename=item.csv_path.split('/')[-1]) }}" class="button3">Паспорт</a>
+        <a href="{{ url_for('download_pdf', csv_filename=item.csv_path.split('/')[-1]) }}" class="button3">Паспорт-ФТК</a>
+        
+    {% endfor %}
+
+    <form action="/search" method="post">
+        <label for="product_id">Идентификатор:</label>
+        <input type="text" id="product_id" name="product_id" required>
+        <button type="submit">Search</button>
+    </form>
+    
+    {% if product_info %}
+        <h2>Product Information:</h2>
+        <ul>
+            {% for key, value in product_info.items() %}
+            <li>{{ key }}: {{ value }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
