@@ -1,0 +1,22 @@
+version: '3.8'  # Ensure the version number is in quotes
+
+services:
+  web:
+    build: .
+    ports:
+      - "50:50"  # Maps port 5000 on the host to port 5000 in the container
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_APP=appdot.py
+      - FLASK_ENV=development
+    command: flask run --host=0.0.0.0 --port=50  # Flask runs internally on port 5000
+
+  nginx:
+    image: nginx:1.21.5-alpine
+    ports:
+      - "8074:8074"  # Nginx listens on 8080 and proxies to Flask on 5000
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web
